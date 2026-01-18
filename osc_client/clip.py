@@ -300,3 +300,194 @@ class Clip:
         self._client.send(
             "/live/clip/set/loop_end", track_index, clip_index, float(end)
         )
+
+    # Start/end time
+
+    def get_start_time(self, track_index: int, clip_index: int) -> float:
+        """Get the clip start time in beats.
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+
+        Returns:
+            Start time in beats
+        """
+        result = self._client.query(
+            "/live/clip/get/start_time", track_index, clip_index
+        )
+        return float(result[2])
+
+    def set_start_time(
+        self, track_index: int, clip_index: int, time: float
+    ) -> None:
+        """Set the clip start time.
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+            time: Start time in beats
+        """
+        self._client.send(
+            "/live/clip/set/start_time", track_index, clip_index, float(time)
+        )
+
+    def get_end_time(self, track_index: int, clip_index: int) -> float:
+        """Get the clip end time in beats.
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+
+        Returns:
+            End time in beats
+        """
+        result = self._client.query(
+            "/live/clip/get/end_time", track_index, clip_index
+        )
+        return float(result[2])
+
+    def set_end_time(
+        self, track_index: int, clip_index: int, time: float
+    ) -> None:
+        """Set the clip end time.
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+            time: End time in beats
+        """
+        self._client.send(
+            "/live/clip/set/end_time", track_index, clip_index, float(time)
+        )
+
+    # Looping
+
+    def get_looping(self, track_index: int, clip_index: int) -> bool:
+        """Check if clip looping is enabled.
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+
+        Returns:
+            True if looping is enabled
+        """
+        result = self._client.query(
+            "/live/clip/get/looping", track_index, clip_index
+        )
+        return bool(result[2])
+
+    def set_looping(
+        self, track_index: int, clip_index: int, enabled: bool
+    ) -> None:
+        """Enable or disable clip looping.
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+            enabled: True to enable looping
+        """
+        self._client.send(
+            "/live/clip/set/looping", track_index, clip_index, int(enabled)
+        )
+
+    def duplicate_loop(self, track_index: int, clip_index: int) -> None:
+        """Duplicate the loop content of a clip.
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+        """
+        self._client.send("/live/clip/duplicate_loop", track_index, clip_index)
+
+    # Warp (audio clips)
+
+    def get_warp_mode(self, track_index: int, clip_index: int) -> int:
+        """Get the warp mode for an audio clip.
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+
+        Returns:
+            Warp mode (0=Beats, 1=Tones, 2=Texture, 3=Re-Pitch, 4=Complex, 5=Complex Pro)
+        """
+        result = self._client.query(
+            "/live/clip/get/warp_mode", track_index, clip_index
+        )
+        return int(result[2])
+
+    def set_warp_mode(
+        self, track_index: int, clip_index: int, mode: int
+    ) -> None:
+        """Set the warp mode for an audio clip.
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+            mode: Warp mode (0=Beats, 1=Tones, 2=Texture, 3=Re-Pitch, 4=Complex, 5=Complex Pro)
+        """
+        self._client.send(
+            "/live/clip/set/warp_mode", track_index, clip_index, int(mode)
+        )
+
+    # Pitch
+
+    def get_pitch_coarse(self, track_index: int, clip_index: int) -> int:
+        """Get the coarse pitch adjustment for a clip (audio clips only).
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+
+        Returns:
+            Pitch adjustment in semitones (-48 to +48), or 0 for MIDI clips
+        """
+        result = self._client.query(
+            "/live/clip/get/pitch_coarse", track_index, clip_index
+        )
+        return int(result[2]) if len(result) > 2 and result[2] is not None else 0
+
+    def set_pitch_coarse(
+        self, track_index: int, clip_index: int, pitch: int
+    ) -> None:
+        """Set the coarse pitch adjustment for a clip.
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+            pitch: Pitch adjustment in semitones (-48 to +48)
+        """
+        self._client.send(
+            "/live/clip/set/pitch_coarse", track_index, clip_index, int(pitch)
+        )
+
+    def get_pitch_fine(self, track_index: int, clip_index: int) -> float:
+        """Get the fine pitch adjustment for a clip (audio clips only).
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+
+        Returns:
+            Fine pitch adjustment in cents (-50 to +50), or 0.0 for MIDI clips
+        """
+        result = self._client.query(
+            "/live/clip/get/pitch_fine", track_index, clip_index
+        )
+        return float(result[2]) if len(result) > 2 and result[2] is not None else 0.0
+
+    def set_pitch_fine(
+        self, track_index: int, clip_index: int, cents: float
+    ) -> None:
+        """Set the fine pitch adjustment for a clip.
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+            cents: Fine pitch adjustment in cents (-50 to +50)
+        """
+        self._client.send(
+            "/live/clip/set/pitch_fine", track_index, clip_index, float(cents)
+        )

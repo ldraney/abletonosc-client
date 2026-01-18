@@ -83,3 +83,43 @@ class View:
             view_name: View name (e.g., "Session", "Arranger", "Detail", "Browser")
         """
         self._client.send("/live/view/focus_view", view_name)
+
+    # Clip selection
+
+    def get_selected_clip(self) -> tuple[int, int]:
+        """Get the currently selected clip.
+
+        Returns:
+            Tuple of (track_index, clip_index), or (-1, -1) if none selected
+        """
+        result = self._client.query("/live/view/get/selected_clip")
+        return (int(result[0]), int(result[1])) if len(result) >= 2 else (-1, -1)
+
+    def set_selected_clip(self, track_index: int, clip_index: int) -> None:
+        """Set the selected clip.
+
+        Args:
+            track_index: Track index (0-based)
+            clip_index: Clip/scene index (0-based)
+        """
+        self._client.send("/live/view/set/selected_clip", track_index, clip_index)
+
+    # Device selection
+
+    def get_selected_device(self) -> tuple[int, int]:
+        """Get the currently selected device.
+
+        Returns:
+            Tuple of (track_index, device_index), or (-1, -1) if none selected
+        """
+        result = self._client.query("/live/view/get/selected_device")
+        return (int(result[0]), int(result[1])) if len(result) >= 2 else (-1, -1)
+
+    def set_selected_device(self, track_index: int, device_index: int) -> None:
+        """Set the selected device.
+
+        Args:
+            track_index: Track index (0-based)
+            device_index: Device index (0-based)
+        """
+        self._client.send("/live/view/set/selected_device", track_index, device_index)

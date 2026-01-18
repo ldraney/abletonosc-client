@@ -94,3 +94,67 @@ def test_is_midi_clip(clip, test_clip_with_notes):
     t, s = test_clip_with_notes["track"], test_clip_with_notes["scene"]
     assert clip.get_is_midi_clip(t, s) is True
     assert clip.get_is_audio_clip(t, s) is False
+
+
+# Phase 8: Clip properties tests
+
+
+def test_get_start_time(clip, test_clip_with_notes):
+    """Test getting clip start time."""
+    t, s = test_clip_with_notes["track"], test_clip_with_notes["scene"]
+    start_time = clip.get_start_time(t, s)
+    assert isinstance(start_time, float)
+
+
+def test_get_end_time(clip, test_clip_with_notes):
+    """Test getting clip end time."""
+    t, s = test_clip_with_notes["track"], test_clip_with_notes["scene"]
+    end_time = clip.get_end_time(t, s)
+    assert isinstance(end_time, float)
+    assert end_time > 0
+
+
+def test_get_looping(clip, test_clip_with_notes):
+    """Test getting clip looping state."""
+    t, s = test_clip_with_notes["track"], test_clip_with_notes["scene"]
+    looping = clip.get_looping(t, s)
+    assert isinstance(looping, bool)
+
+
+def test_set_looping(clip, test_clip_with_notes):
+    """Test setting clip looping state."""
+    t, s = test_clip_with_notes["track"], test_clip_with_notes["scene"]
+    original = clip.get_looping(t, s)
+    try:
+        clip.set_looping(t, s, True)
+        assert clip.get_looping(t, s) is True
+
+        clip.set_looping(t, s, False)
+        assert clip.get_looping(t, s) is False
+    finally:
+        clip.set_looping(t, s, original)
+
+
+def test_duplicate_loop(clip, test_clip_with_notes):
+    """Test duplicating loop (just verify no error)."""
+    t, s = test_clip_with_notes["track"], test_clip_with_notes["scene"]
+    # Just verify method executes without error
+    clip.duplicate_loop(t, s)
+
+
+def test_get_pitch_coarse(clip, test_clip_with_notes):
+    """Test getting coarse pitch adjustment (returns 0 for MIDI clips)."""
+    t, s = test_clip_with_notes["track"], test_clip_with_notes["scene"]
+    pitch = clip.get_pitch_coarse(t, s)
+    assert isinstance(pitch, int)
+    # MIDI clips return 0, audio clips return -48 to +48
+    assert -48 <= pitch <= 48
+
+
+def test_get_pitch_fine(clip, test_clip_with_notes):
+    """Test getting fine pitch adjustment (returns 0 for MIDI clips)."""
+    t, s = test_clip_with_notes["track"], test_clip_with_notes["scene"]
+    pitch = clip.get_pitch_fine(t, s)
+    assert isinstance(pitch, float)
+    # MIDI clips return 0, audio clips return -50 to +50
+    assert -50 <= pitch <= 50
