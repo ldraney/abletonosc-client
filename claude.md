@@ -58,8 +58,29 @@ Multi-step orchestration for complex production tasks.
 
 ## Key Repos
 - `ideoforms/AbletonOSC` - upstream OSC bridge (install this in Ableton)
-- `ldraney/AbletonOSC` - fork for any customizations needed
+- `ldraney/AbletonOSC` - fork with device insertion support (PR #173 pending)
 - `ldraney/ableton-manual` - RAG for Ableton Live 12 manual reference
+
+## AbletonOSC Fork Setup
+
+Our fork adds `/live/track/insert_device` for loading devices via OSC. To set it up:
+
+```bash
+# Clone the fork
+cd ~
+git clone https://github.com/ldraney/AbletonOSC.git
+
+# Symlink to Ableton's Remote Scripts (so edits are immediately available)
+rm -rf "/Users/$USER/Music/Ableton/User Library/Remote Scripts/AbletonOSC"
+ln -s ~/AbletonOSC "/Users/$USER/Music/Ableton/User Library/Remote Scripts/AbletonOSC"
+
+# Restart Ableton or reload via OSC
+python3 -c "from osc_client import connect; connect().send('/live/api/reload')"
+```
+
+**Why symlink?** Without it, you have two copies (git repo vs Remote Scripts) and must manually sync changes. The symlink makes them the same directory.
+
+**After editing AbletonOSC code:** Just send `/live/api/reload` - no Ableton restart needed.
 
 ## Tech Stack
 - Python 3.11+
@@ -115,12 +136,18 @@ pytest -v
   - You should hear a C major chord briefly when clip tests run (proves end-to-end)
   - Track count returns to original after tests complete
 
-### Manual Setup Required (Device Tests)
-Device tests require a device (instrument or effect) on track 0:
+### Manual Setup Required (Device Parameter Tests)
+Device parameter tests (in `test_device.py`) require a device on track 0:
 1. Open Ableton Live with AbletonOSC enabled
 2. Add any device to track 0 (e.g., drag "Simpler" or "Wavetable" onto track 0)
 3. Run `pytest -v`
 
-Without a device on track 0, device tests will skip with a clear message.
+Without a device on track 0, device parameter tests will skip with a clear message.
 
-**Note:** AbletonOSC doesn't support creating devices via OSC, so device tests cannot be fully automated.
+### Device Insertion Tests (Fully Automated)
+Device insertion tests (in `test_track.py`) are fully automated - they create their own tracks and devices:
+- `test_insert_device` - Creates MIDI track, inserts Wavetable
+- `test_insert_audio_effect` - Creates audio track, inserts Compressor
+- `test_delete_device` - Creates track, adds device, deletes it
+
+**Note:** Device insertion requires our AbletonOSC fork with `/live/track/insert_device`.
