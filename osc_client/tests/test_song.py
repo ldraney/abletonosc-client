@@ -468,3 +468,99 @@ def test_set_punch_out(song):
         assert song.get_punch_out() is False
     finally:
         song.set_punch_out(original)
+
+
+# Navigation tests
+
+
+def test_tap_tempo(song):
+    """Test tap tempo (just verify no error)."""
+    # Just verify method executes without error
+    song.tap_tempo()
+
+
+def test_jump_by(song):
+    """Test jumping by beats (just verify no error)."""
+    # jump_by may only work during playback
+    # Just verify the method executes without error
+    song.jump_by(4.0)
+    song.jump_by(-4.0)
+
+
+def test_jump_to_cues(song):
+    """Test jumping to cue points (just verify no error)."""
+    # These may not do anything if no cue points exist,
+    # but should not raise errors
+    song.jump_to_next_cue()
+    song.jump_to_prev_cue()
+
+
+# Cue point tests
+
+
+def test_get_cue_points(song):
+    """Test getting cue points."""
+    cue_points = song.get_cue_points()
+    assert isinstance(cue_points, tuple)
+
+
+def test_cue_point_add_and_delete(song):
+    """Test adding and deleting cue points."""
+    # Get initial cue points
+    initial_cues = song.get_cue_points()
+
+    # Set position and add a cue point
+    song.set_current_song_time(8.0)
+    time.sleep(SETTLE_TIME)
+    song.cue_point_add_or_delete()
+    time.sleep(SETTLE_TIME)
+
+    # Delete it (calling again at same position deletes)
+    song.cue_point_add_or_delete()
+    time.sleep(SETTLE_TIME)
+
+
+# Key and scale tests
+
+
+def test_get_root_note(song):
+    """Test getting root note."""
+    root = song.get_root_note()
+    assert isinstance(root, int)
+    assert 0 <= root <= 11
+
+
+def test_set_root_note(song):
+    """Test setting root note."""
+    original = song.get_root_note()
+    try:
+        song.set_root_note(2)  # D
+        time.sleep(SETTLE_TIME)
+        assert song.get_root_note() == 2
+
+        song.set_root_note(0)  # C
+        time.sleep(SETTLE_TIME)
+        assert song.get_root_note() == 0
+    finally:
+        song.set_root_note(original)
+
+
+def test_get_scale_name(song):
+    """Test getting scale name."""
+    scale = song.get_scale_name()
+    assert isinstance(scale, str)
+
+
+def test_set_scale_name(song):
+    """Test setting scale name."""
+    original = song.get_scale_name()
+    try:
+        song.set_scale_name("Minor")
+        time.sleep(SETTLE_TIME)
+        assert song.get_scale_name() == "Minor"
+
+        song.set_scale_name("Major")
+        time.sleep(SETTLE_TIME)
+        assert song.get_scale_name() == "Major"
+    finally:
+        song.set_scale_name(original)

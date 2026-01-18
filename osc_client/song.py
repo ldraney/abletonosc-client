@@ -522,3 +522,97 @@ class Song:
             enabled: True to enable punch-out
         """
         self._client.send("/live/song/set/punch_out", int(enabled))
+
+    # Navigation
+
+    def tap_tempo(self) -> None:
+        """Tap tempo - call repeatedly to set tempo by tapping."""
+        self._client.send("/live/song/tap_tempo")
+
+    def jump_by(self, beats: float) -> None:
+        """Jump forward or backward by a number of beats.
+
+        Args:
+            beats: Number of beats to jump (negative to go backward)
+        """
+        self._client.send("/live/song/jump_by", float(beats))
+
+    def jump_to_next_cue(self) -> None:
+        """Jump to the next cue point."""
+        self._client.send("/live/song/jump_to_next_cue")
+
+    def jump_to_prev_cue(self) -> None:
+        """Jump to the previous cue point."""
+        self._client.send("/live/song/jump_to_prev_cue")
+
+    # Cue points
+
+    def get_cue_points(self) -> tuple:
+        """Get all cue points in the song.
+
+        Returns:
+            Tuple of cue point data (name, time pairs)
+        """
+        result = self._client.query("/live/song/get/cue_points")
+        return result
+
+    def cue_point_jump(self, cue_index: int) -> None:
+        """Jump to a specific cue point by index.
+
+        Args:
+            cue_index: Cue point index (0-based)
+        """
+        self._client.send("/live/song/cue_point/jump", cue_index)
+
+    def cue_point_add_or_delete(self) -> None:
+        """Add or delete a cue point at the current position.
+
+        If a cue point exists at the current position, it will be deleted.
+        Otherwise, a new cue point will be created.
+        """
+        self._client.send("/live/song/cue_point/add_or_delete")
+
+    def cue_point_set_name(self, cue_index: int, name: str) -> None:
+        """Set the name of a cue point.
+
+        Args:
+            cue_index: Cue point index (0-based)
+            name: New name for the cue point
+        """
+        self._client.send("/live/song/cue_point/set/name", cue_index, name)
+
+    # Key and scale
+
+    def get_root_note(self) -> int:
+        """Get the root note of the song's key.
+
+        Returns:
+            Root note as MIDI note number (0-11, where 0=C, 1=C#, etc.)
+        """
+        result = self._client.query("/live/song/get/root_note")
+        return int(result[0])
+
+    def set_root_note(self, note: int) -> None:
+        """Set the root note of the song's key.
+
+        Args:
+            note: Root note as MIDI note number (0-11, where 0=C, 1=C#, etc.)
+        """
+        self._client.send("/live/song/set/root_note", int(note))
+
+    def get_scale_name(self) -> str:
+        """Get the scale name of the song.
+
+        Returns:
+            Scale name (e.g., "Major", "Minor", "Dorian")
+        """
+        result = self._client.query("/live/song/get/scale_name")
+        return str(result[0])
+
+    def set_scale_name(self, name: str) -> None:
+        """Set the scale name of the song.
+
+        Args:
+            name: Scale name (e.g., "Major", "Minor", "Dorian")
+        """
+        self._client.send("/live/song/set/scale_name", name)
