@@ -302,3 +302,148 @@ def test_delete_device(song, track):
     finally:
         song.delete_track(track_idx)
         time.sleep(SETTLE_TIME)
+
+
+# Routing tests
+
+
+def test_get_input_routing_type(track):
+    """Test getting input routing type."""
+    routing_type = track.get_input_routing_type(0)
+    assert isinstance(routing_type, str)
+
+
+def test_get_input_routing_channel(track):
+    """Test getting input routing channel."""
+    channel = track.get_input_routing_channel(0)
+    assert isinstance(channel, str)
+
+
+def test_get_output_routing_type(track):
+    """Test getting output routing type."""
+    routing_type = track.get_output_routing_type(0)
+    assert isinstance(routing_type, str)
+
+
+def test_get_output_routing_channel(track):
+    """Test getting output routing channel."""
+    channel = track.get_output_routing_channel(0)
+    assert isinstance(channel, str)
+
+
+def test_get_available_input_routing_types(track):
+    """Test getting available input routing types."""
+    types = track.get_available_input_routing_types(0)
+    assert isinstance(types, tuple)
+
+
+def test_get_available_output_routing_types(track):
+    """Test getting available output routing types."""
+    types = track.get_available_output_routing_types(0)
+    assert isinstance(types, tuple)
+
+
+# Monitoring tests
+
+
+def test_get_current_monitoring_state(track):
+    """Test getting current monitoring state."""
+    state = track.get_current_monitoring_state(0)
+    assert isinstance(state, int)
+    assert state in (0, 1, 2)  # In, Auto, Off
+
+
+# Track capability tests
+
+
+def test_get_can_be_armed(track):
+    """Test checking if track can be armed."""
+    can_arm = track.get_can_be_armed(0)
+    assert isinstance(can_arm, bool)
+
+
+def test_get_has_midi_input(track):
+    """Test checking if track has MIDI input."""
+    has_midi = track.get_has_midi_input(0)
+    assert isinstance(has_midi, bool)
+
+
+def test_get_has_midi_output(track):
+    """Test checking if track has MIDI output."""
+    has_midi = track.get_has_midi_output(0)
+    assert isinstance(has_midi, bool)
+
+
+def test_get_has_audio_input(track):
+    """Test checking if track has audio input."""
+    has_audio = track.get_has_audio_input(0)
+    assert isinstance(has_audio, bool)
+
+
+def test_get_has_audio_output(track):
+    """Test checking if track has audio output."""
+    has_audio = track.get_has_audio_output(0)
+    assert isinstance(has_audio, bool)
+
+
+# Track state tests
+
+
+def test_get_fired_slot_index(track):
+    """Test getting fired slot index."""
+    slot_idx = track.get_fired_slot_index(0)
+    assert isinstance(slot_idx, int)
+
+
+def test_get_playing_slot_index(track):
+    """Test getting playing slot index."""
+    slot_idx = track.get_playing_slot_index(0)
+    assert isinstance(slot_idx, int)
+
+
+def test_get_color_index(track):
+    """Test getting track color index."""
+    color_idx = track.get_color_index(0)
+    assert isinstance(color_idx, int)
+    assert 0 <= color_idx <= 69
+
+
+def test_set_color_index(track):
+    """Test setting track color index."""
+    original = track.get_color_index(0)
+    try:
+        track.set_color_index(0, 5)
+        time.sleep(SETTLE_TIME)
+        assert track.get_color_index(0) == 5
+    finally:
+        track.set_color_index(0, original)
+
+
+def test_get_is_visible(track):
+    """Test checking if track is visible."""
+    is_visible = track.get_is_visible(0)
+    assert isinstance(is_visible, bool)
+
+
+# Meter tests
+
+
+def test_get_output_meter_level(track):
+    """Test getting output meter level."""
+    level = track.get_output_meter_level(0)
+    assert isinstance(level, float)
+    assert 0.0 <= level <= 1.0
+
+
+def test_get_output_meter_left(track):
+    """Test getting left output meter level."""
+    level = track.get_output_meter_left(0)
+    assert isinstance(level, float)
+    assert 0.0 <= level <= 1.0
+
+
+def test_get_output_meter_right(track):
+    """Test getting right output meter level."""
+    level = track.get_output_meter_right(0)
+    assert isinstance(level, float)
+    assert 0.0 <= level <= 1.0

@@ -321,3 +321,365 @@ class Track:
             device_index: Device index to delete (0-based)
         """
         self._client.send("/live/track/delete_device", track_index, device_index)
+
+    # Input routing
+
+    def get_input_routing_type(self, track_index: int) -> str:
+        """Get the input routing type for a track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Input routing type name (e.g., "Ext. In", "No Input")
+        """
+        result = self._client.query(
+            "/live/track/get/input_routing_type", track_index
+        )
+        return str(result[1]) if len(result) > 1 else ""
+
+    def set_input_routing_type(self, track_index: int, routing_type: str) -> None:
+        """Set the input routing type for a track.
+
+        Args:
+            track_index: Track index (0-based)
+            routing_type: Input routing type name
+        """
+        self._client.send(
+            "/live/track/set/input_routing_type", track_index, routing_type
+        )
+
+    def get_input_routing_channel(self, track_index: int) -> str:
+        """Get the input routing channel for a track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Input routing channel name
+        """
+        result = self._client.query(
+            "/live/track/get/input_routing_channel", track_index
+        )
+        return str(result[1]) if len(result) > 1 else ""
+
+    def set_input_routing_channel(self, track_index: int, channel: str) -> None:
+        """Set the input routing channel for a track.
+
+        Args:
+            track_index: Track index (0-based)
+            channel: Input routing channel name
+        """
+        self._client.send(
+            "/live/track/set/input_routing_channel", track_index, channel
+        )
+
+    # Output routing
+
+    def get_output_routing_type(self, track_index: int) -> str:
+        """Get the output routing type for a track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Output routing type name (e.g., "Master", "Sends Only")
+        """
+        result = self._client.query(
+            "/live/track/get/output_routing_type", track_index
+        )
+        return str(result[1]) if len(result) > 1 else ""
+
+    def set_output_routing_type(self, track_index: int, routing_type: str) -> None:
+        """Set the output routing type for a track.
+
+        Args:
+            track_index: Track index (0-based)
+            routing_type: Output routing type name
+        """
+        self._client.send(
+            "/live/track/set/output_routing_type", track_index, routing_type
+        )
+
+    def get_output_routing_channel(self, track_index: int) -> str:
+        """Get the output routing channel for a track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Output routing channel name
+        """
+        result = self._client.query(
+            "/live/track/get/output_routing_channel", track_index
+        )
+        return str(result[1]) if len(result) > 1 else ""
+
+    def set_output_routing_channel(self, track_index: int, channel: str) -> None:
+        """Set the output routing channel for a track.
+
+        Args:
+            track_index: Track index (0-based)
+            channel: Output routing channel name
+        """
+        self._client.send(
+            "/live/track/set/output_routing_channel", track_index, channel
+        )
+
+    # Available routing options
+
+    def get_available_input_routing_types(self, track_index: int) -> tuple:
+        """Get available input routing types for a track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Tuple of available input routing type names
+        """
+        result = self._client.query(
+            "/live/track/get/available_input_routing_types", track_index
+        )
+        return result[1:] if len(result) > 1 else ()
+
+    def get_available_output_routing_types(self, track_index: int) -> tuple:
+        """Get available output routing types for a track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Tuple of available output routing type names
+        """
+        result = self._client.query(
+            "/live/track/get/available_output_routing_types", track_index
+        )
+        return result[1:] if len(result) > 1 else ()
+
+    # Monitoring
+
+    def get_current_monitoring_state(self, track_index: int) -> int:
+        """Get the current monitoring state for a track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Monitoring state (0=In, 1=Auto, 2=Off)
+        """
+        result = self._client.query(
+            "/live/track/get/current_monitoring_state", track_index
+        )
+        return int(result[1])
+
+    # Track capabilities
+
+    def get_can_be_armed(self, track_index: int) -> bool:
+        """Check if a track can be armed for recording.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            True if track can be armed
+        """
+        result = self._client.query(
+            "/live/track/get/can_be_armed", track_index
+        )
+        return bool(result[1])
+
+    def get_has_midi_input(self, track_index: int) -> bool:
+        """Check if a track has MIDI input.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            True if track has MIDI input
+        """
+        result = self._client.query(
+            "/live/track/get/has_midi_input", track_index
+        )
+        return bool(result[1])
+
+    def get_has_midi_output(self, track_index: int) -> bool:
+        """Check if a track has MIDI output.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            True if track has MIDI output
+        """
+        result = self._client.query(
+            "/live/track/get/has_midi_output", track_index
+        )
+        return bool(result[1])
+
+    def get_has_audio_input(self, track_index: int) -> bool:
+        """Check if a track has audio input.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            True if track has audio input
+        """
+        result = self._client.query(
+            "/live/track/get/has_audio_input", track_index
+        )
+        return bool(result[1])
+
+    def get_has_audio_output(self, track_index: int) -> bool:
+        """Check if a track has audio output.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            True if track has audio output
+        """
+        result = self._client.query(
+            "/live/track/get/has_audio_output", track_index
+        )
+        return bool(result[1])
+
+    # Track state
+
+    def get_fired_slot_index(self, track_index: int) -> int:
+        """Get the index of the clip slot that was fired (triggered).
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Fired slot index, or -1 if none
+        """
+        result = self._client.query(
+            "/live/track/get/fired_slot_index", track_index
+        )
+        return int(result[1])
+
+    def get_playing_slot_index(self, track_index: int) -> int:
+        """Get the index of the currently playing clip slot.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Playing slot index, or -1 if none
+        """
+        result = self._client.query(
+            "/live/track/get/playing_slot_index", track_index
+        )
+        return int(result[1])
+
+    def get_color_index(self, track_index: int) -> int:
+        """Get the color index of a track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Color index (0-69)
+        """
+        result = self._client.query(
+            "/live/track/get/color_index", track_index
+        )
+        return int(result[1])
+
+    def set_color_index(self, track_index: int, color_index: int) -> None:
+        """Set the color index of a track.
+
+        Args:
+            track_index: Track index (0-based)
+            color_index: Color index (0-69)
+        """
+        self._client.send(
+            "/live/track/set/color_index", track_index, int(color_index)
+        )
+
+    # Group tracks
+
+    def get_fold_state(self, track_index: int) -> bool:
+        """Get the fold state of a group track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            True if track is folded (collapsed)
+        """
+        result = self._client.query(
+            "/live/track/get/fold_state", track_index
+        )
+        return bool(result[1])
+
+    def set_fold_state(self, track_index: int, folded: bool) -> None:
+        """Set the fold state of a group track.
+
+        Args:
+            track_index: Track index (0-based)
+            folded: True to fold (collapse) the group
+        """
+        self._client.send(
+            "/live/track/set/fold_state", track_index, int(folded)
+        )
+
+    def get_is_visible(self, track_index: int) -> bool:
+        """Check if a track is visible.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            True if track is visible
+        """
+        result = self._client.query(
+            "/live/track/get/is_visible", track_index
+        )
+        return bool(result[1])
+
+    # Meters
+
+    def get_output_meter_level(self, track_index: int) -> float:
+        """Get the output meter level for a track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Output meter level (0.0-1.0)
+        """
+        result = self._client.query(
+            "/live/track/get/output_meter_level", track_index
+        )
+        return float(result[1])
+
+    def get_output_meter_left(self, track_index: int) -> float:
+        """Get the left channel output meter level for a track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Left channel meter level (0.0-1.0)
+        """
+        result = self._client.query(
+            "/live/track/get/output_meter_left", track_index
+        )
+        return float(result[1]) if len(result) > 1 and result[1] is not None else 0.0
+
+    def get_output_meter_right(self, track_index: int) -> float:
+        """Get the right channel output meter level for a track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Right channel meter level (0.0-1.0)
+        """
+        result = self._client.query(
+            "/live/track/get/output_meter_right", track_index
+        )
+        return float(result[1]) if len(result) > 1 and result[1] is not None else 0.0
