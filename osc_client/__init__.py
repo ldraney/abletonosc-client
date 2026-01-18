@@ -13,6 +13,7 @@ from osc_client.song import Song
 from osc_client.track import Track
 from osc_client.view import View
 from osc_client import scales
+from osc_client import chords
 
 __all__ = [
     "AbletonOSCClient",
@@ -26,6 +27,7 @@ __all__ = [
     "View",
     "connect",
     "scales",
+    "chords",
 ]
 
 
