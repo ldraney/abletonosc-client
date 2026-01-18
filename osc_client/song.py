@@ -248,3 +248,66 @@ class Song:
             index: Track index to duplicate (0-based)
         """
         self._client.send("/live/song/duplicate_track", index)
+
+    # Groove
+
+    def get_groove_amount(self) -> float:
+        """Get the global groove amount.
+
+        Returns:
+            Groove amount (0.0-1.0)
+        """
+        result = self._client.query("/live/song/get/groove_amount")
+        return float(result[0])
+
+    def set_groove_amount(self, amount: float) -> None:
+        """Set the global groove amount.
+
+        Args:
+            amount: Groove amount (0.0-1.0)
+        """
+        self._client.send("/live/song/set/groove_amount", float(amount))
+
+    # Undo/Redo
+
+    def undo(self) -> None:
+        """Undo the last action."""
+        self._client.send("/live/song/undo")
+
+    def redo(self) -> None:
+        """Redo the last undone action."""
+        self._client.send("/live/song/redo")
+
+    def can_undo(self) -> bool:
+        """Check if undo is available.
+
+        Returns:
+            True if undo is possible
+        """
+        result = self._client.query("/live/song/get/can_undo")
+        return bool(result[0])
+
+    def can_redo(self) -> bool:
+        """Check if redo is available.
+
+        Returns:
+            True if redo is possible
+        """
+        result = self._client.query("/live/song/get/can_redo")
+        return bool(result[0])
+
+    # Clip control
+
+    def stop_all_clips(self) -> None:
+        """Stop all playing clips in the session."""
+        self._client.send("/live/song/stop_all_clips")
+
+    # MIDI capture
+
+    def capture_midi(self) -> None:
+        """Capture recently played MIDI notes into a clip.
+
+        Creates a new clip from MIDI notes that were played
+        while not recording (requires armed track).
+        """
+        self._client.send("/live/song/capture_midi")

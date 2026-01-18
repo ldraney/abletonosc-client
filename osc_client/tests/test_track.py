@@ -126,3 +126,51 @@ def test_get_num_devices(track):
     """Test getting device count on track."""
     num_devices = track.get_num_devices(0)
     assert num_devices >= 0
+
+
+def test_get_send(song, track):
+    """Test getting send level (requires return track)."""
+    # Create a return track if needed
+    original_tracks = song.get_num_tracks()
+    song.create_return_track()
+    time.sleep(SETTLE_TIME)
+
+    try:
+        # Get send 0 level on track 0
+        send_level = track.get_send(0, 0)
+        assert 0.0 <= send_level <= 1.0
+    finally:
+        # Clean up - delete the return track
+        song.delete_return_track(0)
+        time.sleep(SETTLE_TIME)
+
+
+def test_set_send(song, track):
+    """Test setting send level (requires return track)."""
+    # Create a return track
+    song.create_return_track()
+    time.sleep(SETTLE_TIME)
+
+    try:
+        original = track.get_send(0, 0)
+
+        track.set_send(0, 0, 0.5)
+        time.sleep(SETTLE_TIME)
+        assert abs(track.get_send(0, 0) - 0.5) < 0.01
+
+        track.set_send(0, 0, 0.0)
+        time.sleep(SETTLE_TIME)
+        assert abs(track.get_send(0, 0)) < 0.01
+
+        # Restore
+        track.set_send(0, 0, original)
+    finally:
+        # Clean up - delete the return track
+        song.delete_return_track(0)
+        time.sleep(SETTLE_TIME)
+
+
+def test_stop_all_clips(track):
+    """Test stopping all clips on a track."""
+    # Just verify the method executes without error
+    track.stop_all_clips(0)

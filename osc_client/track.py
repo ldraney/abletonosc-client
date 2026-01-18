@@ -220,3 +220,104 @@ class Track:
         result = self._client.query("/live/track/get/num_devices", track_index)
         # Response format: (track_index, num_devices)
         return int(result[1])
+
+    # Sends
+
+    def get_send(self, track_index: int, send_index: int) -> float:
+        """Get the send level for a track.
+
+        Args:
+            track_index: Track index (0-based)
+            send_index: Send index (0-based, corresponds to return track order)
+
+        Returns:
+            Send level (0.0-1.0)
+        """
+        result = self._client.query(
+            "/live/track/get/send", track_index, send_index
+        )
+        # Response format: (track_index, send_index, level)
+        return float(result[2])
+
+    def set_send(self, track_index: int, send_index: int, level: float) -> None:
+        """Set the send level for a track.
+
+        Args:
+            track_index: Track index (0-based)
+            send_index: Send index (0-based, corresponds to return track order)
+            level: Send level (0.0-1.0)
+        """
+        self._client.send(
+            "/live/track/set/send", track_index, send_index, float(level)
+        )
+
+    # Clip control
+
+    def stop_all_clips(self, track_index: int) -> None:
+        """Stop all playing clips on this track.
+
+        Args:
+            track_index: Track index (0-based)
+        """
+        self._client.send("/live/track/stop_all_clips", track_index)
+
+    # Device insertion
+
+    def insert_device(
+        self, track_index: int, device_name: str, device_index: int = -1
+    ) -> int:
+        """Insert a device onto a track by name.
+
+        Searches instruments, audio effects, midi effects, drums, and sounds
+        for a matching device name and loads it onto the track.
+
+        Args:
+            track_index: Track index (0-based)
+            device_name: Name of the device to load (e.g., "Wavetable", "Reverb")
+            device_index: Position to insert device (-1 = end of chain)
+
+        Returns:
+            Index of newly inserted device, or -1 if device not found
+        """
+        result = self._client.query(
+            "/live/track/insert_device", track_index, device_name, device_index
+        )
+        # Response format: (track_index, device_index)
+        return int(result[1]) if len(result) > 1 else -1
+
+    def get_device_names(self, track_index: int) -> tuple:
+        """Get names of all devices on a track.
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Tuple of device names
+        """
+        result = self._client.query("/live/track/get/devices/name", track_index)
+        # Response format: (track_index, name1, name2, ...)
+        return result[1:] if len(result) > 1 else ()
+
+    def get_device_types(self, track_index: int) -> tuple:
+        """Get types of all devices on a track.
+
+        Device types: 0 = audio_effect, 1 = instrument, 2 = midi_effect
+
+        Args:
+            track_index: Track index (0-based)
+
+        Returns:
+            Tuple of device types (integers)
+        """
+        result = self._client.query("/live/track/get/devices/type", track_index)
+        # Response format: (track_index, type1, type2, ...)
+        return result[1:] if len(result) > 1 else ()
+
+    def delete_device(self, track_index: int, device_index: int) -> None:
+        """Delete a device from a track.
+
+        Args:
+            track_index: Track index (0-based)
+            device_index: Device index to delete (0-based)
+        """
+        self._client.send("/live/track/delete_device", track_index, device_index)

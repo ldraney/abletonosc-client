@@ -157,3 +157,76 @@ def test_duplicate_track(song):
     song.delete_track(1)
     time.sleep(SETTLE_TIME)
     assert song.get_num_tracks() == original_count
+
+
+def test_get_groove_amount(song):
+    """Test getting groove amount."""
+    groove = song.get_groove_amount()
+    assert 0.0 <= groove <= 1.0
+
+
+def test_set_groove_amount(song):
+    """Test setting groove amount."""
+    original = song.get_groove_amount()
+    try:
+        song.set_groove_amount(0.5)
+        time.sleep(SETTLE_TIME)
+        assert abs(song.get_groove_amount() - 0.5) < 0.01
+
+        song.set_groove_amount(0.0)
+        time.sleep(SETTLE_TIME)
+        assert abs(song.get_groove_amount()) < 0.01
+    finally:
+        song.set_groove_amount(original)
+
+
+def test_can_undo_redo(song):
+    """Test undo/redo availability checks."""
+    can_undo = song.can_undo()
+    can_redo = song.can_redo()
+
+    # These return bools regardless of state
+    assert isinstance(can_undo, bool)
+    assert isinstance(can_redo, bool)
+
+
+def test_undo_redo(song):
+    """Test undo and redo functionality."""
+    # Make a change we can undo
+    original_tempo = song.get_tempo()
+    new_tempo = 130.0 if original_tempo != 130.0 else 125.0
+
+    song.set_tempo(new_tempo)
+    time.sleep(SETTLE_TIME)
+    assert song.get_tempo() == new_tempo
+
+    # Undo should revert
+    if song.can_undo():
+        song.undo()
+        time.sleep(SETTLE_TIME)
+        # Tempo should be back to original
+        assert song.get_tempo() == original_tempo
+
+        # Redo should reapply
+        if song.can_redo():
+            song.redo()
+            time.sleep(SETTLE_TIME)
+            assert song.get_tempo() == new_tempo
+
+            # Clean up - undo back to original
+            song.undo()
+            time.sleep(SETTLE_TIME)
+
+
+def test_stop_all_clips(song):
+    """Test stopping all clips."""
+    # Just verify the method executes without error
+    # We can't easily verify clips stopped without playing one first
+    song.stop_all_clips()
+
+
+def test_capture_midi(song):
+    """Test MIDI capture (just verify no error)."""
+    # capture_midi requires recently played MIDI, so we just
+    # verify it doesn't raise an exception
+    song.capture_midi()
