@@ -22,7 +22,8 @@ class Scene:
             Scene name
         """
         result = self._client.query("/live/scene/get/name", scene_index)
-        return str(result[0]) if result else ""
+        # Response format: (scene_index, name)
+        return str(result[1]) if len(result) > 1 else ""
 
     def set_name(self, scene_index: int, name: str) -> None:
         """Set the scene name.
@@ -53,7 +54,8 @@ class Scene:
             Color as integer
         """
         result = self._client.query("/live/scene/get/color", scene_index)
-        return int(result[0])
+        # Response format: (scene_index, color)
+        return int(result[1])
 
     def set_color(self, scene_index: int, color: int) -> None:
         """Set the scene color.
@@ -74,7 +76,8 @@ class Scene:
             Scene tempo in BPM, or 0 if not set
         """
         result = self._client.query("/live/scene/get/tempo", scene_index)
-        return float(result[0]) if result else 0.0
+        # Response format: (scene_index, tempo)
+        return float(result[1]) if len(result) > 1 else 0.0
 
     def set_tempo(self, scene_index: int, tempo: float) -> None:
         """Set the scene tempo.
@@ -95,4 +98,5 @@ class Scene:
             True if triggered
         """
         result = self._client.query("/live/scene/get/is_triggered", scene_index)
-        return bool(result[0])
+        # Response format: (scene_index, is_triggered)
+        return bool(result[1])

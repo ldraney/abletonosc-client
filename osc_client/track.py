@@ -24,7 +24,8 @@ class Track:
             Track name
         """
         result = self._client.query("/live/track/get/name", track_index)
-        return str(result[0]) if result else ""
+        # Response format: (track_index, name)
+        return str(result[1]) if len(result) > 1 else ""
 
     def set_name(self, track_index: int, name: str) -> None:
         """Set the track name.
@@ -47,7 +48,8 @@ class Track:
             Volume level (0.0-1.0, where 0.85 is 0dB)
         """
         result = self._client.query("/live/track/get/volume", track_index)
-        return float(result[0])
+        # Response format: (track_index, volume)
+        return float(result[1])
 
     def set_volume(self, track_index: int, volume: float) -> None:
         """Set the track volume.
@@ -70,7 +72,8 @@ class Track:
             Pan position (-1.0 left to 1.0 right, 0.0 center)
         """
         result = self._client.query("/live/track/get/panning", track_index)
-        return float(result[0])
+        # Response format: (track_index, panning)
+        return float(result[1])
 
     def set_panning(self, track_index: int, pan: float) -> None:
         """Set the track pan position.
@@ -93,7 +96,8 @@ class Track:
             True if muted
         """
         result = self._client.query("/live/track/get/mute", track_index)
-        return bool(result[0])
+        # Response format: (track_index, mute)
+        return bool(result[1])
 
     def set_mute(self, track_index: int, muted: bool) -> None:
         """Mute or unmute a track.
@@ -116,7 +120,8 @@ class Track:
             True if soloed
         """
         result = self._client.query("/live/track/get/solo", track_index)
-        return bool(result[0])
+        # Response format: (track_index, solo)
+        return bool(result[1])
 
     def set_solo(self, track_index: int, soloed: bool) -> None:
         """Solo or unsolo a track.
@@ -139,7 +144,8 @@ class Track:
             True if armed
         """
         result = self._client.query("/live/track/get/arm", track_index)
-        return bool(result[0])
+        # Response format: (track_index, arm)
+        return bool(result[1])
 
     def set_arm(self, track_index: int, armed: bool) -> None:
         """Arm or disarm a track for recording.
@@ -162,7 +168,8 @@ class Track:
             Color as integer
         """
         result = self._client.query("/live/track/get/color", track_index)
-        return int(result[0])
+        # Response format: (track_index, color)
+        return int(result[1])
 
     def set_color(self, track_index: int, color: int) -> None:
         """Set the track color.
@@ -183,7 +190,8 @@ class Track:
             True if track is a group
         """
         result = self._client.query("/live/track/get/is_foldable", track_index)
-        return bool(result[0])
+        # Response format: (track_index, is_foldable)
+        return bool(result[1])
 
     def get_is_grouped(self, track_index: int) -> bool:
         """Check if track is inside a group.
@@ -195,7 +203,8 @@ class Track:
             True if track is in a group
         """
         result = self._client.query("/live/track/get/is_grouped", track_index)
-        return bool(result[0])
+        # Response format: (track_index, is_grouped)
+        return bool(result[1])
 
     # Devices
 
@@ -209,4 +218,5 @@ class Track:
             Number of devices
         """
         result = self._client.query("/live/track/get/num_devices", track_index)
-        return int(result[0])
+        # Response format: (track_index, num_devices)
+        return int(result[1])

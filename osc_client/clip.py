@@ -45,7 +45,8 @@ class Clip:
             Clip name
         """
         result = self._client.query("/live/clip/get/name", track_index, clip_index)
-        return str(result[0]) if result else ""
+        # Response format: (track_index, clip_index, name)
+        return str(result[2]) if len(result) > 2 else ""
 
     def set_name(self, track_index: int, clip_index: int, name: str) -> None:
         """Set the clip name.
@@ -90,7 +91,8 @@ class Clip:
             Clip length in beats
         """
         result = self._client.query("/live/clip/get/length", track_index, clip_index)
-        return float(result[0])
+        # Response format: (track_index, clip_index, length)
+        return float(result[2])
 
     def get_is_midi_clip(self, track_index: int, clip_index: int) -> bool:
         """Check if clip is a MIDI clip.
@@ -105,7 +107,8 @@ class Clip:
         result = self._client.query(
             "/live/clip/get/is_midi_clip", track_index, clip_index
         )
-        return bool(result[0])
+        # Response format: (track_index, clip_index, is_midi_clip)
+        return bool(result[2])
 
     def get_is_audio_clip(self, track_index: int, clip_index: int) -> bool:
         """Check if clip is an audio clip.
@@ -120,7 +123,8 @@ class Clip:
         result = self._client.query(
             "/live/clip/get/is_audio_clip", track_index, clip_index
         )
-        return bool(result[0])
+        # Response format: (track_index, clip_index, is_audio_clip)
+        return bool(result[2])
 
     def get_is_playing(self, track_index: int, clip_index: int) -> bool:
         """Check if clip is currently playing.
@@ -135,7 +139,8 @@ class Clip:
         result = self._client.query(
             "/live/clip/get/is_playing", track_index, clip_index
         )
-        return bool(result[0])
+        # Response format: (track_index, clip_index, is_playing)
+        return bool(result[2])
 
     def get_color(self, track_index: int, clip_index: int) -> int:
         """Get the clip color.
@@ -148,7 +153,8 @@ class Clip:
             Color as integer
         """
         result = self._client.query("/live/clip/get/color", track_index, clip_index)
-        return int(result[0])
+        # Response format: (track_index, clip_index, color)
+        return int(result[2])
 
     def set_color(self, track_index: int, clip_index: int, color: int) -> None:
         """Set the clip color.
@@ -252,7 +258,8 @@ class Clip:
         result = self._client.query(
             "/live/clip/get/loop_start", track_index, clip_index
         )
-        return float(result[0])
+        # Response format: (track_index, clip_index, loop_start)
+        return float(result[2])
 
     def set_loop_start(
         self, track_index: int, clip_index: int, start: float
@@ -279,7 +286,8 @@ class Clip:
             Loop end position in beats
         """
         result = self._client.query("/live/clip/get/loop_end", track_index, clip_index)
-        return float(result[0])
+        # Response format: (track_index, clip_index, loop_end)
+        return float(result[2])
 
     def set_loop_end(self, track_index: int, clip_index: int, end: float) -> None:
         """Set the loop end position.

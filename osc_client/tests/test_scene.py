@@ -1,5 +1,9 @@
 """Tests for Scene operations."""
 
+import time
+
+SETTLE_TIME = 0.1  # Time for Ableton to process changes
+
 
 def test_get_name(scene):
     """Test getting scene name."""
@@ -12,6 +16,7 @@ def test_set_name(scene):
     original = scene.get_name(0)
     try:
         scene.set_name(0, "Test Scene")
+        time.sleep(SETTLE_TIME)
         assert scene.get_name(0) == "Test Scene"
     finally:
         scene.set_name(0, original)

@@ -1,5 +1,9 @@
 """Tests for Song operations."""
 
+import time
+
+SETTLE_TIME = 0.1  # Time for Ableton to process changes
+
 
 def test_get_tempo(song):
     """Test getting current tempo."""
@@ -31,12 +35,15 @@ def test_start_stop_playing(song):
     original_playing = song.get_is_playing()
     try:
         song.stop_playing()
+        time.sleep(SETTLE_TIME)
         assert song.get_is_playing() is False
 
         song.start_playing()
+        time.sleep(SETTLE_TIME)
         assert song.get_is_playing() is True
 
         song.stop_playing()
+        time.sleep(SETTLE_TIME)
         assert song.get_is_playing() is False
     finally:
         if original_playing:

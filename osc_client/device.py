@@ -45,7 +45,8 @@ class Device:
         result = self._client.query(
             "/live/device/get/name", track_index, device_index
         )
-        return str(result[0]) if result else ""
+        # Response format: (track_index, device_index, name)
+        return str(result[2]) if len(result) > 2 else ""
 
     def get_class_name(self, track_index: int, device_index: int) -> str:
         """Get the device class name (type).
@@ -60,7 +61,8 @@ class Device:
         result = self._client.query(
             "/live/device/get/class_name", track_index, device_index
         )
-        return str(result[0]) if result else ""
+        # Response format: (track_index, device_index, class_name)
+        return str(result[2]) if len(result) > 2 else ""
 
     def get_is_active(self, track_index: int, device_index: int) -> bool:
         """Check if the device is active (enabled).
@@ -75,7 +77,8 @@ class Device:
         result = self._client.query(
             "/live/device/get/is_active", track_index, device_index
         )
-        return bool(result[0])
+        # Response format: (track_index, device_index, is_active)
+        return bool(result[2])
 
     def set_is_active(
         self, track_index: int, device_index: int, active: bool
@@ -104,7 +107,8 @@ class Device:
         result = self._client.query(
             "/live/device/get/num_parameters", track_index, device_index
         )
-        return int(result[0])
+        # Response format: (track_index, device_index, num_parameters)
+        return int(result[2])
 
     def get_parameter_value(
         self, track_index: int, device_index: int, parameter_index: int
@@ -125,7 +129,8 @@ class Device:
             device_index,
             parameter_index,
         )
-        return float(result[0])
+        # Response format: (track_index, device_index, parameter_index, value)
+        return float(result[3])
 
     def set_parameter_value(
         self,
@@ -169,7 +174,8 @@ class Device:
             device_index,
             parameter_index,
         )
-        return str(result[0]) if result else ""
+        # Response format: (track_index, device_index, parameter_index, name)
+        return str(result[3]) if len(result) > 3 else ""
 
     def get_parameter_min(
         self, track_index: int, device_index: int, parameter_index: int
@@ -190,7 +196,8 @@ class Device:
             device_index,
             parameter_index,
         )
-        return float(result[0])
+        # Response format: (track_index, device_index, parameter_index, min)
+        return float(result[3])
 
     def get_parameter_max(
         self, track_index: int, device_index: int, parameter_index: int
@@ -211,7 +218,8 @@ class Device:
             device_index,
             parameter_index,
         )
-        return float(result[0])
+        # Response format: (track_index, device_index, parameter_index, max)
+        return float(result[3])
 
     def get_parameters(
         self, track_index: int, device_index: int

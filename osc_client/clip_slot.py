@@ -25,7 +25,8 @@ class ClipSlot:
         result = self._client.query(
             "/live/clip_slot/get/has_clip", track_index, scene_index
         )
-        return bool(result[0])
+        # Response format: (track_index, scene_index, has_clip)
+        return bool(result[2])
 
     def create_clip(
         self, track_index: int, scene_index: int, length: float = 4.0
@@ -81,7 +82,8 @@ class ClipSlot:
         result = self._client.query(
             "/live/clip_slot/get/is_playing", track_index, scene_index
         )
-        return bool(result[0])
+        # Response format: (track_index, scene_index, is_playing)
+        return bool(result[2])
 
     def get_is_triggered(self, track_index: int, scene_index: int) -> bool:
         """Check if the clip slot is triggered (about to play).
@@ -96,7 +98,8 @@ class ClipSlot:
         result = self._client.query(
             "/live/clip_slot/get/is_triggered", track_index, scene_index
         )
-        return bool(result[0])
+        # Response format: (track_index, scene_index, is_triggered)
+        return bool(result[2])
 
     def get_is_recording(self, track_index: int, scene_index: int) -> bool:
         """Check if the clip slot is recording.
@@ -111,4 +114,5 @@ class ClipSlot:
         result = self._client.query(
             "/live/clip_slot/get/is_recording", track_index, scene_index
         )
-        return bool(result[0])
+        # Response format: (track_index, scene_index, is_recording)
+        return bool(result[2])

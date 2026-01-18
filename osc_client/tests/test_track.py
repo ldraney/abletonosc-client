@@ -1,5 +1,9 @@
 """Tests for Track operations."""
 
+import time
+
+SETTLE_TIME = 0.1  # Time for Ableton to process changes
+
 
 def test_get_name(track):
     """Test getting track name."""
@@ -12,6 +16,7 @@ def test_set_name(track):
     original = track.get_name(0)
     try:
         track.set_name(0, "Test Track")
+        time.sleep(SETTLE_TIME)
         assert track.get_name(0) == "Test Track"
     finally:
         track.set_name(0, original)
@@ -28,9 +33,11 @@ def test_set_volume(track):
     original = track.get_volume(0)
     try:
         track.set_volume(0, 0.5)
+        time.sleep(SETTLE_TIME)
         assert abs(track.get_volume(0) - 0.5) < 0.01
 
         track.set_volume(0, 0.85)  # 0dB
+        time.sleep(SETTLE_TIME)
         assert abs(track.get_volume(0) - 0.85) < 0.01
     finally:
         track.set_volume(0, original)
@@ -47,12 +54,15 @@ def test_set_panning(track):
     original = track.get_panning(0)
     try:
         track.set_panning(0, -0.5)  # Pan left
+        time.sleep(SETTLE_TIME)
         assert abs(track.get_panning(0) - (-0.5)) < 0.01
 
         track.set_panning(0, 0.5)  # Pan right
+        time.sleep(SETTLE_TIME)
         assert abs(track.get_panning(0) - 0.5) < 0.01
 
         track.set_panning(0, 0.0)  # Center
+        time.sleep(SETTLE_TIME)
         assert abs(track.get_panning(0)) < 0.01
     finally:
         track.set_panning(0, original)
@@ -69,9 +79,11 @@ def test_set_mute(track):
     original = track.get_mute(0)
     try:
         track.set_mute(0, True)
+        time.sleep(SETTLE_TIME)
         assert track.get_mute(0) is True
 
         track.set_mute(0, False)
+        time.sleep(SETTLE_TIME)
         assert track.get_mute(0) is False
     finally:
         track.set_mute(0, original)
@@ -88,9 +100,11 @@ def test_set_solo(track):
     original = track.get_solo(0)
     try:
         track.set_solo(0, True)
+        time.sleep(SETTLE_TIME)
         assert track.get_solo(0) is True
 
         track.set_solo(0, False)
+        time.sleep(SETTLE_TIME)
         assert track.get_solo(0) is False
     finally:
         track.set_solo(0, original)
