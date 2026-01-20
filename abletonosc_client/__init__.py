@@ -4,6 +4,7 @@ Provides a Pythonic interface to control Ableton Live via OSC.
 """
 
 from abletonosc_client.application import Application
+from abletonosc_client.browser import Browser
 from abletonosc_client.client import AbletonOSCClient
 from abletonosc_client.clip import Clip
 from abletonosc_client.clip_slot import ClipSlot
@@ -19,6 +20,7 @@ from abletonosc_client import chords
 __all__ = [
     "AbletonOSCClient",
     "Application",
+    "Browser",
     "Clip",
     "ClipSlot",
     "Device",

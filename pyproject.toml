@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "abletonosc-client"
-version = "1.0.0"
+version = "1.1.0"
 description = "Python OSC client wrapper for AbletonOSC - control Ableton Live via OSC"
 authors = ["ldraney"]
 license = "MIT"
