@@ -39,6 +39,7 @@ def connect(
     host: str = "127.0.0.1",
     send_port: int = 11000,
     receive_port: int = 11001,
+    listen_host: str | None = None,
 ) -> AbletonOSCClient:
     """Create and return an AbletonOSC client.
 
@@ -48,8 +49,10 @@ def connect(
         host: Ableton host address (default: localhost)
         send_port: Port to send OSC messages (default: 11000)
         receive_port: Port to receive OSC responses (default: 11001)
+        listen_host: Address to bind for receiving responses (default: same as host).
+                     Set to "0.0.0.0" for WSL2->Windows connections.
 
     Returns:
         Connected AbletonOSCClient instance
     """
-    return AbletonOSCClient(host, send_port, receive_port)
+    return AbletonOSCClient(host, send_port, receive_port, listen_host)

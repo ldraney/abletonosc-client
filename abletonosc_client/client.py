@@ -20,10 +20,13 @@ class AbletonOSCClient:
         host: str = "127.0.0.1",
         send_port: int = 11000,
         receive_port: int = 11001,
+        listen_host: str | None = None,
     ):
         self.host = host
         self.send_port = send_port
         self.receive_port = receive_port
+        # For WSL2->Windows: send to remote host, listen on local interface
+        self.listen_host = listen_host if listen_host is not None else host
 
         # Outbound client
         self._client = udp_client.SimpleUDPClient(host, send_port)
@@ -37,7 +40,7 @@ class AbletonOSCClient:
         self._dispatcher.set_default_handler(self._handle_response)
 
         self._server = ThreadingOSCUDPServer(
-            (host, receive_port),
+            (self.listen_host, receive_port),
             self._dispatcher,
         )
         self._server_thread = threading.Thread(target=self._server.serve_forever)
